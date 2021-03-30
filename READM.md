@@ -13,3 +13,19 @@ http GET localhost:8080/restaurants    //읽기
 
 #### CORS 처리하기
 - 스프링에서는 @CrossOrigin을 컨트롤러에 적용해주면 해결된다.
+
+#### Restaurant Update - Patch
+~~~
+http POST localhost:8080/restaurants name=BeRyong address=Seoul //쓰기
+http GET localhost:8080/restaurants    //읽기
+http PATCH localhost:8080/restaurants/1 name=BeRyong address=Busan
+~~~
+
+#### @Transactional 선언적 트랜잭션
+- 트랜잭션의 범위, 롤백 규칙 등을 정의한다.
+- 트랜잭션 특징
+    - 원자성 : 한 트래잭션 내에서 실행한 작업들흔 하나로 간주된다.
+    - 일관성 : 트랜잭션은 일관성 있는 데이터 베이스 상태를 유지한다.
+    - 격리성 : 동시에 실행되는 트랜잭션들이 서로 영향을 미치지 않도록 격리해야 한다.
+    - 지속성 : 트랜잭션을 성공적으로 마치면 결과가 항상 저장되어야 한다.
+- 업데이트 실행시에 Service에 @Transactional 어노테이션을 명시해주면, repository의 save를 호출 하지 않아도 트랜잭션의 특성으로 데이터가 변한다.

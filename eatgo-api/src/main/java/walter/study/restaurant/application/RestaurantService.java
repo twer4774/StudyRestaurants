@@ -7,6 +7,7 @@ import walter.study.restaurant.domain.MenuItemRepository;
 import walter.study.restaurant.domain.Restaurant;
 import walter.study.restaurant.domain.RestaurantRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -43,5 +44,14 @@ public class RestaurantService {
 
     public Restaurant addRestaurant(Restaurant restaurant) {
         return restaurantRepository.save(restaurant);
+    }
+
+    @Transactional
+    public Restaurant updateRestaurant(long id, String name, String address) {
+        Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+
+        restaurant.updateInformation(name, address);
+
+        return restaurant;
     }
 }
