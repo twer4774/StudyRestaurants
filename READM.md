@@ -29,3 +29,12 @@ http PATCH localhost:8080/restaurants/1 name=BeRyong address=Busan
     - 격리성 : 동시에 실행되는 트랜잭션들이 서로 영향을 미치지 않도록 격리해야 한다.
     - 지속성 : 트랜잭션을 성공적으로 마치면 결과가 항상 저장되어야 한다.
 - 업데이트 실행시에 Service에 @Transactional 어노테이션을 명시해주면, repository의 save를 호출 하지 않아도 트랜잭션의 특성으로 데이터가 변한다.
+
+#### Validation
+- 기존 web-starter에 의존성이 있었지만, 따로 분리되어 아래 의존성을 추가해야한다.
+- Validation은 유효성을 검사하는데 사용하는 어노테이션
+  - @NotEmpty : 비어있으면 안된다. 
+  - @Valid : 해당 객체의 유효성 검사를 하겠다. (Restaurant 객체에 @NotEmpty등의 조건이 정의 되어 있어야 하며, controller에서 @Valid 적용)
+~~~
+implementation 'org.springframework.boot:spring-boot-starter-validation'
+~~~
