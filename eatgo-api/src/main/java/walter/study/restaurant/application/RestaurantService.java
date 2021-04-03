@@ -2,10 +2,7 @@ package walter.study.restaurant.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import walter.study.restaurant.domain.MenuItem;
-import walter.study.restaurant.domain.MenuItemRepository;
-import walter.study.restaurant.domain.Restaurant;
-import walter.study.restaurant.domain.RestaurantRepository;
+import walter.study.restaurant.domain.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -25,8 +22,8 @@ public class RestaurantService {
     }
 
     public Restaurant getRestaurant(Long id) {
-        Restaurant restaurant = restaurantRepository.findById(1004L)
-                .orElse(null);
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new RestaurantNotFoundException(id));
 
         List<MenuItem> menuItems = menuItemRepository.findAllByRestaurantId(id);
         restaurant.setMenuItems(menuItems);

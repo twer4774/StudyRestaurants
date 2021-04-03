@@ -4,16 +4,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import walter.study.restaurant.domain.MenuItem;
-import walter.study.restaurant.domain.MenuItemRepository;
-import walter.study.restaurant.domain.Restaurant;
-import walter.study.restaurant.domain.RestaurantRepository;
+import walter.study.restaurant.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -66,7 +65,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    public void getRestaurant(){
+    public void getRestaurantWithExisted(){
         Restaurant restaurant = restaurantService.getRestaurant(1004L);
 
         assertEquals(restaurant.getId(), 1004L);
@@ -74,6 +73,15 @@ class RestaurantServiceTest {
         MenuItem menuItem = restaurant.getMenuItems().get(0);
 
         assertEquals(menuItem.getName(), "Kimchi" );
+    }
+
+    @Test
+    public void getRestaurantWithNotExisted(){
+
+        //service의 getRestaurant에서 throw 추가 필요
+        assertThrows(RestaurantNotFoundException.class, ()-> {
+            Restaurant restaurant = restaurantService.getRestaurant(404L);
+        });
     }
 
     @Test

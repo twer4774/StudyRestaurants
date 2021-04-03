@@ -38,3 +38,38 @@ http PATCH localhost:8080/restaurants/1 name=BeRyong address=Busan
 ~~~
 implementation 'org.springframework.boot:spring-boot-starter-validation'
 ~~~
+#### ControllerAdvice
+- 에러 핸들링을 위한 어노테이션
+- 예외 관련된 코드 처리를 위해 @ControllerAdvice와 @ExceptionHandler를 사용한다.
+  - @ExceptionHandler는 @Controller, @RestController가 적용된 Bean내에서 발생하는 예외를 잡아서 하나의 메소드에서 처리해준다.
+     - 하나의 클래스에 관한것. @Service 어노테이션은 안된다.
+  - @ControllerAdvice는 모든 @Cotontroller의 예외를 잡아준다.
+    - 모든 컨트롤러에 관한
+~~~
+@Test
+  public void detailWithNotExisted() throws Exception {
+      given(restaurantService.getRestaurant(404L))
+              .willThrow(new RestaurantNotFoundException(404L));
+
+      mockMvc.perform(get("/restaurants/404"))
+              .andExpect(status().isNotFound())
+      .andExpect(content().string("{}"));
+  }
+  
+//=========================
+
+/**
+ * 에러 처리
+ */
+@ControllerAdvice
+public class RestaurantErrorAdvice {
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public String handlerNotFound(){
+        return "{}";
+
+    }
+}
+~~~
