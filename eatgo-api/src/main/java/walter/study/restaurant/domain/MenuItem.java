@@ -8,7 +8,6 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,6 +17,7 @@ public class MenuItem {
     @GeneratedValue
     private Long id;
 
+    @Setter
     private Long restaurantId;
 
     private  String name;

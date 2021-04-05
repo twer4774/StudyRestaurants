@@ -1,5 +1,6 @@
 package walter.study.restaurant.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.boot.configurationprocessor.MetadataCollector;
 
@@ -32,6 +33,7 @@ public class Restaurant {
 
     //DB에 저장하는 처리를 하지 않음
     @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL) //json에서 null이 아닐 때만 넣어줌
     private List<MenuItem> menuItems;
 
     public String getInformation(){

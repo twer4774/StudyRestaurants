@@ -19,6 +19,8 @@ http GET localhost:8080/restaurants    //읽기
 http POST localhost:8080/restaurants name=BeRyong address=Seoul //쓰기
 http GET localhost:8080/restaurants    //읽기
 http PATCH localhost:8080/restaurants/1 name=BeRyong address=Busan
+//menuitems.json 파일의 내용 넣기
+http PATCH localhost:8080/restaurants/1/menuitems < menuitems.json
 ~~~
 
 #### @Transactional 선언적 트랜잭션
