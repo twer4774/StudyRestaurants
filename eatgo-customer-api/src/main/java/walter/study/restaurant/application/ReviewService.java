@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import walter.study.restaurant.domain.Review;
 import walter.study.restaurant.domain.ReviewRepository;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
 public class ReviewService {
@@ -16,9 +14,5 @@ public class ReviewService {
     public Review addReview(Long restaurantId, Review review) {
         review.setRestaurantId(restaurantId);
         return reviewRepository.save(review);
-    }
-
-    public List<Review> getReviews() {
-        return reviewRepository.findAll();
     }
 }

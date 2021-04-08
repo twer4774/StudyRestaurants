@@ -7,10 +7,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import walter.study.restaurant.application.RestaurantService;
-import walter.study.restaurant.domain.*;
+import walter.study.restaurant.domain.MenuItem;
+import walter.study.restaurant.domain.Restaurant;
+import walter.study.restaurant.domain.RestaurantNotFoundException;
+import walter.study.restaurant.domain.Review;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,12 +60,26 @@ class RestaurantControllerTest {
                 .address("Seoul")
                 .build();
 
+        MenuItem menuItem = MenuItem.builder()
+                .name("Kimchi")
+                .build();
+        restaurant.setMenuItems(Collections.singletonList(menuItem));
+
+        Review review = Review.builder()
+                .name("JOKER")
+                .score(5)
+                .description("GOOD")
+                .build();
+        restaurant.setReviews(Collections.singletonList(review));
+
         given(restaurantService.getRestaurant(1004L)).willReturn(restaurant);
 
         mockMvc.perform(get("/restaurants/1004"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("\"id\":1004")))
-                .andExpect(content().string(containsString("\"name\":\"Bob zip\"")));
+                .andExpect(content().string(containsString("\"name\":\"Bob zip\"")))
+                .andExpect(content().string(containsString("Kimchi")))
+                .andExpect(content().string(containsString("GOOD")));
 
     }
 

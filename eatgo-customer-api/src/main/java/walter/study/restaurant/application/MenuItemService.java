@@ -13,11 +13,6 @@ public class MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
 
-
-    public List<MenuItem> getMenuItems(Long restaurantId) {
-        return menuItemRepository.findAllByRestaurantId(restaurantId);
-    }
-
     public void bulkUpdate(Long restaurantId, List<MenuItem> menuItems){
 
         for(MenuItem menuItem: menuItems){

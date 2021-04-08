@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -26,6 +25,11 @@ class RestaurantServiceTest {
     @Mock
     private RestaurantRepository restaurantRepository;
 
+    @Mock
+    private MenuItemRepository menuItemRepository;
+
+    @Mock
+    private ReviewRepository reviewRepository;
 
     @BeforeEach
     public void setUp(){
@@ -33,9 +37,11 @@ class RestaurantServiceTest {
         MockitoAnnotations.openMocks(this);
 
         mockRestaurantRepository();
+        mockMenuItemRepository();
+        mockReviewRepository();
 
 
-        restaurantService = new RestaurantService(restaurantRepository);
+        restaurantService = new RestaurantService(restaurantRepository, menuItemRepository, reviewRepository);
     }
 
 
@@ -54,6 +60,29 @@ class RestaurantServiceTest {
         given(restaurantRepository.findById(1004L)).willReturn(Optional.of(restaurant));
     }
 
+    private void mockMenuItemRepository() {
+        List<MenuItem> menuItems = new ArrayList<>();
+        menuItems.add(MenuItem.builder()
+                .name("Kimchi")
+                .build());
+
+        given(menuItemRepository.findAllByRestaurantId(1004L))
+                .willReturn(menuItems);
+    }
+
+    private void mockReviewRepository() {
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(Review.builder()
+                .name("BeRyong")
+                .score(1)
+                .description("Bad")
+                .build());
+
+        given(reviewRepository.findAllByRestaurantId(1004L)).willReturn(reviews);
+
+    }
+
+
 
     @Test
     public void getRestaurants(){
@@ -67,8 +96,17 @@ class RestaurantServiceTest {
     public void getRestaurantWithExisted(){
         Restaurant restaurant = restaurantService.getRestaurant(1004L);
 
+        verify(menuItemRepository).findAllByRestaurantId(eq(1004L));
+        verify(reviewRepository).findAllByRestaurantId(eq(1004L));
+
         assertEquals(restaurant.getId(), 1004L);
 
+        MenuItem menuItem = restaurant.getMenuItems().get(0);
+
+        assertEquals(menuItem.getName(), "Kimchi" );
+
+        Review review = restaurant.getReviews().get(0);
+        assertEquals(review.getDescription(), "Bad" );
     }
 
     @Test
