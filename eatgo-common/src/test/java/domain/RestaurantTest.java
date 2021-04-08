@@ -1,10 +1,10 @@
-package walter.study.restaurant.domain;
+package domain;
 
 import org.junit.jupiter.api.Test;
+import walter.study.restaurant.domain.Restaurant;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 
 class RestaurantTest {
 
