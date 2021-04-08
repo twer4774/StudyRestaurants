@@ -1,5 +1,6 @@
 package walter.study.restaurant.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +13,12 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @CrossOrigin
+@RequiredArgsConstructor
 @RestController
 public class RestaurantController {
 
-    @Autowired
-    private RestaurantService restaurantService;
+
+    private final RestaurantService restaurantService;
 
     @GetMapping("/restaurants")
     public List<Restaurant> list() {
@@ -34,25 +36,5 @@ public class RestaurantController {
         return restaurant;
     }
 
-    @PostMapping("/restaurants")
-    public ResponseEntity<?> create(@Valid @RequestBody Restaurant resource) throws URISyntaxException {
-
-        Restaurant restaurant = restaurantService.addRestaurant(
-                Restaurant.builder()
-                .name(resource.getName())
-                .address(resource.getAddress())
-                .build());
-
-        URI location = new URI("/restaurants/" + restaurant.getId());
-        return ResponseEntity.created(location).body("{}");
-    }
-
-    @PatchMapping("/restaurants/{id}")
-    public String update(@PathVariable("id") Long id,
-                         @Valid @RequestBody Restaurant resource) {
-
-        restaurantService.updateRestaurant(id, resource.getName(), resource.getAddress());
-        return "{}";
-    }
 }
 
