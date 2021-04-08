@@ -11,7 +11,7 @@ import walter.study.restaurant.domain.Review;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.contains;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -41,6 +41,6 @@ class ReviewControllerTest {
 
         mvc.perform(get("/reviews"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(contains("cool")));
+                .andExpect(content().string(containsString("Cool")));
     }
 }

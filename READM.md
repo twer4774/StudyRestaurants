@@ -75,3 +75,18 @@ public class RestaurantErrorAdvice {
     }
 }
 ~~~
+##gradle 실행
+~~~
+./gradlew build
+~~~
+-에러 발생
+  -스프링 부트를 사용하지 않는 eatgo-common은 build.gralde에 다음을 추가한다.
+~~~
+jar{
+    enabled = true
+}
+
+bootJar{
+    enabled = false
+}
+~~~
