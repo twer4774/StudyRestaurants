@@ -90,3 +90,11 @@ bootJar{
     enabled = false
 }
 ~~~
+- test 실행
+  - 인텔리제이에서 테스트 환경을 그래들로 변경 
+    - 그래들을 추가하여 폴더선택
+    - task에 clean test 추가
+- 터미널 그래들 테스트 명령(위와 같은동작)
+~~~
+./gradlew test
+~~~
