@@ -11,6 +11,7 @@ import walter.study.restaurant.domain.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
@@ -39,47 +40,45 @@ class RestaurantControllerTest {
                 .build());
 
         given(restaurantService.getRestaurants())
-        .willReturn(restaurants);
+                .willReturn(restaurants);
 
         mockMvc.perform(get("/restaurants"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("\"id\":1004")))
-                .andExpect(content().string(containsString("\"name\":\"JOKER HOUSE\"")));;
+                .andExpect(content().string(containsString("\"name\":\"JOKER HOUSE\"")));
+        ;
     }
 
     @Test
     public void detailWithExisted() throws Exception {
 
-        Restaurant restaurant1 = Restaurant.builder()
+        Restaurant restaurant = Restaurant.builder()
                 .id(1004L)
                 .name("Bob zip")
                 .address("Seoul")
                 .build();
 
-        restaurant1.setMenuItems(Arrays.asList(MenuItem.builder()
+        MenuItem menuItem = MenuItem.builder()
                 .name("Kimchi")
-                .build()));
-
-        Restaurant restaurant2 =Restaurant.builder()
-                .id(2020L)
-                .name("Cyber Food")
-                .address("Seoul")
                 .build();
+        restaurant.setMenuItems(Collections.singletonList(menuItem));
 
-        given(restaurantService.getRestaurant(1004L)).willReturn(restaurant1);
-        given(restaurantService.getRestaurant(2020L)).willReturn(restaurant2);
+        Review review = Review.builder()
+                .name("JOKER")
+                .score(5)
+                .description("GOOD")
+                .build();
+        restaurant.setReviews(Collections.singletonList(review));
+
+        given(restaurantService.getRestaurant(1004L)).willReturn(restaurant);
 
         mockMvc.perform(get("/restaurants/1004"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("\"id\":1004")))
                 .andExpect(content().string(containsString("\"name\":\"Bob zip\"")))
-                .andExpect(content().string(containsString("Kimchi")));
+                .andExpect(content().string(containsString("Kimchi")))
+                .andExpect(content().string(containsString("GOOD")));
 
-
-        mockMvc.perform(get("/restaurants/2020"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"id\":2020")))
-                .andExpect(content().string(containsString("\"name\":\"Cyber Food\"")));
     }
 
     @Test
@@ -89,10 +88,10 @@ class RestaurantControllerTest {
 
         mockMvc.perform(get("/restaurants/404"))
                 .andExpect(status().isNotFound())
-        .andExpect(content().string("{}"));
+                .andExpect(content().string("{}"));
     }
 
-        @Test
+    @Test
     public void createWithInValidData() throws Exception {
 
         given(restaurantService.addRestaurant(any())).will(invocation -> {

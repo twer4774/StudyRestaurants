@@ -1,5 +1,6 @@
 package walter.study.restaurant.application;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import walter.study.restaurant.domain.*;
@@ -7,19 +8,17 @@ import walter.study.restaurant.domain.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class RestaurantService {
 
-    @Autowired
-    RestaurantRepository restaurantRepository;
 
-    @Autowired
-    MenuItemRepository menuItemRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public RestaurantService(RestaurantRepository restaurantRepository, MenuItemRepository menuItemRepository) {
-        this.restaurantRepository = restaurantRepository;
-        this.menuItemRepository = menuItemRepository;
-    }
+    private final MenuItemRepository menuItemRepository;
+
+    private final ReviewRepository reviewRepository;
+
 
     public Restaurant getRestaurant(Long id) {
         Restaurant restaurant = restaurantRepository.findById(id)
@@ -27,6 +26,9 @@ public class RestaurantService {
 
         List<MenuItem> menuItems = menuItemRepository.findAllByRestaurantId(id);
         restaurant.setMenuItems(menuItems);
+
+        List<Review> reviews = reviewRepository.findAllByRestaurantId(id);
+        restaurant.setReviews(reviews);
 
         return restaurant;
     }
