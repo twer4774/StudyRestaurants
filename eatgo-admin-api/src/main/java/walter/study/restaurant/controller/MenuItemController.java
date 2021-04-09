@@ -1,10 +1,7 @@
 package walter.study.restaurant.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import walter.study.restaurant.application.MenuItemService;
 import walter.study.restaurant.domain.MenuItem;
 
@@ -16,6 +13,13 @@ public class MenuItemController {
 
     @Autowired
     private MenuItemService menuItemService;
+
+    @GetMapping("/restaurants/{restaurantId}/menuitems")
+    public List<MenuItem> list(@PathVariable Long restaurantId){
+        List<MenuItem> menuItems = menuItemService.getMenuItems(restaurantId);
+
+        return menuItems;
+    }
 
     @PatchMapping("/restaurants/{restaurantId}/menuitems")
     public String bulkUpdate(

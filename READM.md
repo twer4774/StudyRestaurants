@@ -98,3 +98,34 @@ bootJar{
 ~~~
 ./gradlew test
 ~~~
+## H2 영속성 - 파일로 저장
+- h2는 인메모리방식과 파일방식으로 데이터를 저장할 수 있다.
+- jpa의 hibernate ddl-auto 설정
+  - 아래와 같이 설정하면 프로그램을 재시작해도 데이터가 남아 있다.
+~~~
+spring:
+  datasource:
+    url: jdbc:h2:~/data/study.restauarnt
+  jpa:
+    hibernate:
+      ddl-auto: update
+~~~
+## 프로파일(운영환경)에 맞게 실행
+- yml 설정 ---로 운영환경 구분
+~~~
+spring:
+  datasource:
+    url: jdbc:h2:~/data/study.restauarnt
+  jpa:
+    hibernate:
+      ddl-auto: update
+---
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:h2:mem:test
+~~~
+- terminal 명령어
+~~~
+SPRING_PROFILES_ACTIVE=test ./gradlew test
+~~~
