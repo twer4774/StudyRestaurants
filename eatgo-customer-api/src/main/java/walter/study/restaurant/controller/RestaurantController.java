@@ -1,15 +1,12 @@
 package walter.study.restaurant.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import walter.study.restaurant.application.RestaurantService;
+import walter.study.restaurant.domain.Region;
 import walter.study.restaurant.domain.Restaurant;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.awt.*;
 import java.util.List;
 
 @CrossOrigin
@@ -21,9 +18,8 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     @GetMapping("/restaurants")
-    public List<Restaurant> list() {
-
-        List<Restaurant> restaurants = restaurantService.getRestaurants();
+    public List<Restaurant> list(@RequestParam("region") String region) {
+        List<Restaurant> restaurants = restaurantService.getRestaurants(region);
 
         return restaurants;
     }
