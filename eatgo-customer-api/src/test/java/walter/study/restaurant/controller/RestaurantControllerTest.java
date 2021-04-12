@@ -40,13 +40,14 @@ class RestaurantControllerTest {
         restaurants.add(Restaurant.builder()
                 .id(1004L)
                 .name("JOKER HOUSE")
+                .categoryId(1L)
                 .address("Seoul")
                 .build());
 
-        given(restaurantService.getRestaurants("Seoul"))
+        given(restaurantService.getRestaurants("Seoul", 1L))
                 .willReturn(restaurants);
 
-        mockMvc.perform(get("/restaurants?region=Seoul"))
+        mockMvc.perform(get("/restaurants?region=Seoul&category=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("\"id\":1004")))
                 .andExpect(content().string(containsString("\"name\":\"JOKER HOUSE\"")));

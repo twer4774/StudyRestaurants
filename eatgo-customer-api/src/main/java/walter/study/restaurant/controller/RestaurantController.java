@@ -3,10 +3,8 @@ package walter.study.restaurant.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import walter.study.restaurant.application.RestaurantService;
-import walter.study.restaurant.domain.Region;
 import walter.study.restaurant.domain.Restaurant;
 
-import java.awt.*;
 import java.util.List;
 
 @CrossOrigin
@@ -18,8 +16,9 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     @GetMapping("/restaurants")
-    public List<Restaurant> list(@RequestParam("region") String region) {
-        List<Restaurant> restaurants = restaurantService.getRestaurants(region);
+    public List<Restaurant> list(@RequestParam("region") String region,
+                                 @RequestParam("categoryId") Long categoryId) {
+        List<Restaurant> restaurants = restaurantService.getRestaurants(region, categoryId);
 
         return restaurants;
     }
