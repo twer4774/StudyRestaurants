@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import walter.study.restaurant.domain.Region;
 import walter.study.restaurant.domain.RegionRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
