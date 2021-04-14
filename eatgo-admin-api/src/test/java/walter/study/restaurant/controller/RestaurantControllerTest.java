@@ -47,7 +47,7 @@ class RestaurantControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("\"id\":1004")))
                 .andExpect(content().string(containsString("\"name\":\"JOKER HOUSE\"")));
-        ;
+
     }
 
     @Test
