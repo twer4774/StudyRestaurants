@@ -129,3 +129,23 @@ spring:
 ~~~
 SPRING_PROFILES_ACTIVE=test ./gradlew test
 ~~~
+## 암호화
+- Spring Security 이용
+  <br> implementation 'org.springframework.boot:spring-boot-starter-security' 의존성 추
+  ~~~
+  @Configuration
+@EnableWebSecurity
+public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .cors().disable()
+                .csrf().disable()
+                .formLogin().disable()
+                .headers().frameOptions().disable();
+    }
+
+}
+  ~~~
+- BCrypt
