@@ -132,7 +132,8 @@ SPRING_PROFILES_ACTIVE=test ./gradlew test
 ## 암호화
 - Spring Security 이용
   <br> implementation 'org.springframework.boot:spring-boot-starter-security' 의존성 추
-  ~~~
+  
+~~~
   @Configuration
 @EnableWebSecurity
 public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
@@ -149,3 +150,39 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 }
   ~~~
 - BCrypt
+<br> Spring Security에서 기본으로 제공
+~~~
+public User registerUser(String email, String name, String password) {
+PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+String encodedPassword = passwordEncoder.encode(password);
+
+        User newUser = User.builder()
+                .email(email)
+                .name(name)
+                .password(encodedPassword)
+                .level(1L)
+                .build();
+
+        return userRepository.save(newUser);
+    }
+~~~
+- 사용자 중복 확인
+~~~
+public User registerUser(String email, String name, String password) {
+
+        Optional<User> existed = userRepository.findByEmail(email);
+
+        if(existed.isPresent()){
+            throw new EmailExistedException(email);
+        }
+        ...
+}
+// 커스텀 예외
+public class EmailExistedException extends RuntimeException{
+
+    public EmailExistedException(String email){
+        super("Email is already registered: " + email);
+    }
+
+}
+~~~
