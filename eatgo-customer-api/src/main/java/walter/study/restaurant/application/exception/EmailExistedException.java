@@ -1,4 +1,4 @@
-package walter.study.restaurant.application;
+package walter.study.restaurant.application.exception;
 
 public class EmailExistedException extends RuntimeException{
 

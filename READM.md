@@ -186,3 +186,4 @@ public class EmailExistedException extends RuntimeException{
 
 }
 ~~~
+## 인증(Authentication)
