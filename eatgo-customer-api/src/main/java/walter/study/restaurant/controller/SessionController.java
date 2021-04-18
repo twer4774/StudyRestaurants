@@ -9,6 +9,7 @@ import walter.study.restaurant.application.UserService;
 import walter.study.restaurant.controller.dto.request.SessionRequestDto;
 import walter.study.restaurant.controller.dto.response.SessionResponseDto;
 import walter.study.restaurant.domain.User;
+import walter.study.restaurant.utils.JwtUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,16 +20,19 @@ public class SessionController {
 
     private final UserService userService;
 
+    private final JwtUtil jwtUtil;
+
+
     @PostMapping("/session")
     public ResponseEntity<SessionResponseDto> create(
             @RequestBody SessionRequestDto resource
             ) throws URISyntaxException {
-        String url = "/session";
 
         User user = userService.authenticate(resource.getEmail(), resource.getPassword());
 
-        String accessToken = user.getAccessToken();
+        String accessToken = jwtUtil.createToken(user.getId(), user.getName());
 
+        String url = "/session";
         return ResponseEntity.created(new URI(url))
                 .body(SessionResponseDto.builder().accessToken(accessToken).build());
     }

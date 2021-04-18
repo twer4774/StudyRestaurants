@@ -187,3 +187,16 @@ public class EmailExistedException extends RuntimeException{
 }
 ~~~
 ## 인증(Authentication)
+- JWT(JSON Web Token)
+  - Header
+  - Payload : Claims라는 단위로 정보 저장
+  - Signature : 서명이 담김. HMAC-SHA256 이용
+  - .으로 위의 3가지가 연결되며 Base64 URL Encoding으로 데이터 전송
+  - jsonwebtoken.io 라이브러리 이용
+  ~~~
+  implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
+    runtime 'io.jsonwebtoken:jjwt-impl:0.10.7'
+    runtime 'io.jsonwebtoken:jjwt-jackson:0.10.7'
+  ~~~
+- JWT 주의사항
+  - secret 키는 자체관리가 필요하다. 보통 yml파일에 보관

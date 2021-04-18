@@ -11,8 +11,12 @@ import walter.study.restaurant.application.UserService;
 import walter.study.restaurant.application.exception.EmailNotExistedException;
 import walter.study.restaurant.application.exception.PasswordWrongException;
 import walter.study.restaurant.domain.User;
+import walter.study.restaurant.utils.JwtUtil;
 
+
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -26,6 +30,9 @@ class SessionControllerTest {
     private MockMvc mvc;
 
     @MockBean
+    private JwtUtil jwtUtil;
+
+    @MockBean
     private UserService userService;
 
 
@@ -33,14 +40,19 @@ class SessionControllerTest {
     @DisplayName("정상적인 사용자 인증 성공")
     public void createWithValidAttributes() throws Exception {
 
+        Long id = 1004L;
+        String name = "tester";
         String email = "tester@example.com";
         String password = "test";
 
         User mockUser = User.builder()
-                .password("ACCESSTOKEN")
+                .id(id)
+                .name(name)
                 .build();
 
         given(userService.authenticate(email, password)).willReturn(mockUser);
+
+        given(jwtUtil.createToken(id, name)).willReturn("header.payload.signature");
 
 
         //Email. Password
@@ -50,7 +62,7 @@ class SessionControllerTest {
         )
                 .andExpect(status().isCreated())         //return 201(create 성공)
                 .andExpect(header().string("location", "/session"))
-                .andExpect(content().string("{\"accessToken\":\"ACCESSTOKE\"}"));
+                .andExpect(content().string(containsString("{\"accessToken\":\"header.payload.signature\"}")));
 
         verify(userService).authenticate(eq(email), eq(password));
 
