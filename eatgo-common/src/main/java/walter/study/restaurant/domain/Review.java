@@ -22,7 +22,6 @@ public class Review {
     @Setter
     private Long restaurantId;
 
-    @NotEmpty
     private String name;
 
     @NotNull //Score는 NotEmpty 대신 NotNull 사용

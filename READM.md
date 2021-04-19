@@ -200,3 +200,9 @@ public class EmailExistedException extends RuntimeException{
   ~~~
 - JWT 주의사항
   - secret 키는 자체관리가 필요하다. 보통 yml파일에 보관
+## 인가(Authorization)
+- Stateless
+- Filter
+  - BasicAuthenticationFilter
+  - 스프링에서는 내부적으로 AuthenticationToken 객체 활용
+   UsernamePasswordAuthenticationToken 사용이 대표적
