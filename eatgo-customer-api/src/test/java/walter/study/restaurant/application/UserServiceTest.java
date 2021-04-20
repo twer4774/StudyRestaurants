@@ -7,14 +7,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import walter.study.restaurant.application.exception.EmailExistedException;
-import walter.study.restaurant.application.exception.EmailNotExistedException;
-import walter.study.restaurant.application.exception.PasswordWrongException;
 import walter.study.restaurant.domain.User;
 import walter.study.restaurant.domain.UserRepository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -32,7 +30,7 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         //순서 주의. 순서바꾸면 안된다.
         MockitoAnnotations.openMocks(this);
         userService = new UserService(userRepository, passwordEncoder);
@@ -40,7 +38,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("유저등록-정상적인 동작")
-    public void registerUser(){
+    public void registerUser() {
 
         String email = "tester@example.com";
         String name = "Tester";
@@ -53,7 +51,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("유저등록-이미 존재하는 이미메일")
-    public void registerUserWithExistedEmail(){
+    public void registerUserWithExistedEmail() {
 
         String email = "tester@example.com";
         String name = "Tester";
@@ -73,59 +71,5 @@ class UserServiceTest {
         });
 
         verify(userRepository, never()).save(any());
-    }
-
-    @Test
-    @DisplayName("인증 - 올바른 인증")
-    public void authenticateWithValidAttribute(){
-        String email = "tester@example.com";
-        String password = "test";
-
-        User mockUser = User.builder()
-                .email(email)
-                .build();
-
-        given(userRepository.findByEmail(email)).willReturn(Optional.of(mockUser));
-
-        given(passwordEncoder.matches(any(), any())).willReturn(true);
-
-        User user = userService.authenticate(email, password);
-
-        assertEquals(user.getEmail(), email);
-    }
-
-    @Test
-    @DisplayName("인증-이메일 없음")
-    public void authenticateWithNotExistedEmail(){
-        String email = "x@example.com";
-        String password = "test";
-
-
-        given(userRepository.findByEmail(email)).willReturn(Optional.empty());
-
-        given(passwordEncoder.matches(any(), any())).willReturn(false);
-
-        assertThrows(EmailNotExistedException.class, () -> {
-            userService.authenticate(email, password);
-        });
-
-    }
-
-    @Test
-    @DisplayName("인증-패스워드 틀림")
-    public void authenticateWithWrongPassword(){
-        String email = "tester@example.com";
-        String password = "x";
-
-
-        User mockUser = User.builder().email(email).build();
-
-        given(userRepository.findByEmail(email)).willReturn(Optional.of(mockUser));
-
-
-        assertThrows(PasswordWrongException.class, () -> {
-            userService.authenticate(email, password);
-        });
-
     }
 }

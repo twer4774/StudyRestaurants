@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import walter.study.restaurant.application.exception.EmailExistedException;
+import walter.study.restaurant.application.exception.EmailNotExistedException;
+import walter.study.restaurant.application.exception.PasswordWrongException;
 import walter.study.restaurant.domain.User;
 import walter.study.restaurant.domain.UserRepository;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -24,24 +24,15 @@ public class UserService {
         return new BCryptPasswordEncoder();
     }
 
-    public User registerUser(String email, String name, String password) {
 
-        Optional<User> existed = userRepository.findByEmail(email);
+    public User authenticate(String email, String password) {
 
-        if(existed.isPresent()){
-            throw new EmailExistedException(email);
-        }
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new EmailNotExistedException(email));
 
-        String encodedPassword = passwordEncoder.encode(password);
+        if(!passwordEncoder.matches(password, user.getPassword())){
+            throw new PasswordWrongException();
+        };
 
-        User newUser = User.builder()
-                .email(email)
-                .name(name)
-                .password(encodedPassword)
-                .level(1L)
-                .build();
-
-        return userRepository.save(newUser);
+        return user;
     }
-
 }

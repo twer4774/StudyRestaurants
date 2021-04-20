@@ -18,4 +18,18 @@ class UserTest {
         assertEquals(user.isAdmin(), true);
     }
 
+    @Test
+    public void restaurantOwner() {
+        User user = User.builder().level(1L).build();
+
+
+
+        assertEquals(user.isRestaurantOwner(), false);
+
+        user.setRestaurantId(1004L);
+        assertEquals(user.isRestaurantOwner(), true);
+        assertEquals(user.getRestaurantId(), 1004L);
+
+    }
+
 }

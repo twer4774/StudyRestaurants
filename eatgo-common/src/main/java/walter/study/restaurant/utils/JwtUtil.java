@@ -1,6 +1,7 @@
 package walter.study.restaurant.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -17,14 +18,18 @@ public class JwtUtil {
     }
 
 
-
-
-    public String createToken(long userId, String name) {
+    public String createToken(long userId, String name, Long restaruantId) {
         //JJWT 라이브러리 사용
 
-        String token = Jwts.builder()
+        JwtBuilder builder = Jwts.builder()
                 .claim("userId", userId)
-                .claim("name", name)
+                .claim("name", name);
+
+        if(restaruantId != null){
+            builder = builder.claim("restaurantId", restaruantId);
+        }
+
+        String token = builder
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
